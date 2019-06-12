@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"os/exec"
 
 	"github.com/spf13/cobra"
 )
@@ -14,13 +15,13 @@ var rootCmd = &cobra.Command{
 	Use:   "bitbar-works",
 	Short: "Attendance cli",
 	Run: func(cmd *cobra.Command, args []string) {
-		ex, _ := os.Executable()
-		stat, _ := os.Lstat(ex)
-		if (stat.Mode() & os.ModeSymlink) != 0 {
-			menuCmd.Run(cmd, args)
-		} else {
-			cmd.Help()
-		}
+		// ex, _ := os.Executable()
+		// stat, _ := os.Lstat(ex)
+		// if (stat.Mode() & os.ModeSymlink) != 0 {
+		menuCmd.Run(cmd, args)
+		// } else {
+		// 	cmd.Help()
+		// }
 	},
 }
 
@@ -31,6 +32,12 @@ func Execute() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+}
+
+func printNotificationCenter(str string) {
+	cmdstr := fmt.Sprintf(`osascript -e "display notification \"%s\" with title \"Works\""`, str)
+	fmt.Println(cmdstr)
+	exec.Command("sh", "-c", cmdstr).Run()
 }
 
 // func init() {

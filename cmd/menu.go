@@ -1,8 +1,9 @@
 package cmd
 
 import (
-	"fmt"
+	"os"
 
+	"github.com/johnmccabe/go-bitbar"
 	"github.com/spf13/cobra"
 )
 
@@ -11,7 +12,15 @@ var menuCmd = &cobra.Command{
 	Use:   "menu",
 	Short: "menu function",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("menu called")
+		ex, _ := os.Executable()
+
+		plugin := bitbar.New()
+		plugin.StatusLine("🏢🚶‍")
+		submenu := plugin.NewSubMenu()
+		submenu.Line("Start work").Bash(ex).Params([]string{"start"}).Terminal(false)
+		submenu.Line("End work").Bash(ex).Params([]string{"end"}).Terminal(false)
+
+		plugin.Render()
 	},
 }
 
