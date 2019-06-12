@@ -6,7 +6,26 @@ import (
 	"time"
 )
 
-// EndWork post and record end work time
+// StartWork post and record starting work time
+func StartWork() error {
+	// postURL := "http://compweb01.gmo.local/cws/srwtimerec"
+	// values := url.Values{}
+	// values.Add("dakoku", "syussya")
+	// values.Add("user_id", os.Getenv("WORK_USER"))
+	// values.Add("password", os.Getenv("WORK_PASSWORD"))
+
+	// _, err := http.PostForm(postURL, values)
+	// if err != nil {
+	// 	return err
+	// }
+	err := loggingWorkHistory("start")
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// EndWork post and record ending work time
 func EndWork() error {
 	// postURL := "http://compweb01.gmo.local/cws/srwtimerec"
 	// values := url.Values{}
