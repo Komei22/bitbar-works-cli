@@ -9,7 +9,7 @@ var endCmd = &cobra.Command{
 	Use:   "end",
 	Short: "End work command",
 	Run: func(cmd *cobra.Command, args []string) {
-		printNotificationCenter("call end")
+		printMacNotificationCenter("call end")
 	},
 }
 

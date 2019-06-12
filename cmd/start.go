@@ -9,7 +9,7 @@ var startCmd = &cobra.Command{
 	Use:   "start",
 	Short: "Start work command",
 	Run: func(cmd *cobra.Command, args []string) {
-		printNotificationCenter("call start")
+		printMacNotificationCenter("call start")
 	},
 }
 
