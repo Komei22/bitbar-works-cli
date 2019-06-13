@@ -15,8 +15,8 @@ type Action int
 const (
 	// StartWork is starting work action
 	StartWork = iota
-	// EndWork is ending work action
-	EndWork
+	// FinishWork is ending work action
+	FinishWork
 )
 
 // StampAtendance post and record atendance information.

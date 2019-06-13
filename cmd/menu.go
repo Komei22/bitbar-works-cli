@@ -18,7 +18,7 @@ var menuCmd = &cobra.Command{
 		plugin.StatusLine("🏢🚶‍")
 		submenu := plugin.NewSubMenu()
 		submenu.Line("Start work").Bash(ex).Params([]string{"start"}).Terminal(false)
-		submenu.Line("End work").Bash(ex).Params([]string{"end"}).Terminal(false)
+		submenu.Line("Finish work").Bash(ex).Params([]string{"finish"}).Terminal(false)
 
 		plugin.Render()
 	},
