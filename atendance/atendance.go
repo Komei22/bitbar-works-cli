@@ -22,7 +22,14 @@ const (
 // StampAtendance post and record atendance information.
 func StampAtendance(action Action) (time.Time, error) {
 	t := time.Now()
-	loggingWorkHistory(action, t)
+	err := postAtendance(action)
+	if err != nil {
+		return t, fmt.Errorf("fail post atendance request(%s): Please check $WORK_USER, $WORK_PASSWORD and ip address", err)
+	}
+	err = loggingWorkHistory(action, t)
+	if err != nil {
+		return t, err
+	}
 	return t, nil
 }
 

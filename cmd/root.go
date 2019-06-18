@@ -34,9 +34,9 @@ func Execute() {
 	}
 }
 
-func printMacNotificationCenter(str string) {
-	cmdstr := fmt.Sprintf(`osascript -e "display notification \"%s\" with title \"Works\""`, str)
-	fmt.Println(cmdstr)
+func printMacNotificationCenter(i interface{}) {
+	cmdstr := fmt.Sprintf(`osascript -e "display notification \"%s\" with title \"Works\""`, i)
+	fmt.Println(i)
 	exec.Command("sh", "-c", cmdstr).Run()
 }
 
