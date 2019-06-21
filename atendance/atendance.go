@@ -58,9 +58,14 @@ func postAtendance(action Action) error {
 	return nil
 }
 
+func initWorkHistory() error {
+	err := exec.Command("sh", "-c", "touch ~/.work_history").Run()
+	return err
+}
+
 func loggingWorkHistory(action Action, t time.Time) error {
 	cmdstr := fmt.Sprintf(`echo '%d, %s' >> ~/.work_history`, action, t.Format(time.RFC3339))
-	_, err := exec.Command("sh", "-c", cmdstr).Output()
+	err := exec.Command("sh", "-c", cmdstr).Run()
 	if err != nil {
 		return err
 	}
