@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"os"
 	"os/exec"
 	"time"
+
+	"github.com/mitchellh/go-homedir"
+	"github.com/spf13/viper"
 )
 
 // Action is atendance action
@@ -24,7 +26,7 @@ func StampAtendance(action Action) (time.Time, error) {
 	t := time.Now()
 	err := postAtendance(action)
 	if err != nil {
-		return t, fmt.Errorf("fail post atendance request(%s): Please check $WORK_USER, $WORK_PASSWORD and ip address", err)
+		return t, err
 	}
 	err = loggingWorkHistory(action, t)
 	if err != nil {
@@ -34,19 +36,25 @@ func StampAtendance(action Action) (time.Time, error) {
 }
 
 func postAtendance(action Action) error {
+	if err := loadConfig(); err != nil {
+		return err
+	}
+
 	postURL := "http://compweb01.gmo.local/cws/srwtimerec"
 	values := url.Values{}
-	values.Add("user_id", os.Getenv("WORK_USER"))
-	values.Add("password", os.Getenv("WORK_PASSWORD"))
+	values.Add("user_id", viper.GetString("WORK_USER"))
+	values.Add("password", viper.GetString("WORK_PASSWORD"))
 	if action == StartWork {
 		values.Add("dakoku", "syussya")
 	} else {
 		values.Add("dakoku", "taisya")
 	}
+
 	_, err := http.PostForm(postURL, values)
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -56,5 +64,21 @@ func loggingWorkHistory(action Action, t time.Time) error {
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func loadConfig() error {
+	home, err := homedir.Dir()
+	if err != nil {
+		return err
+	}
+	viper.SetConfigType("toml")
+	viper.AddConfigPath(home)
+	viper.SetConfigName(".bitbar-works")
+
+	if err := viper.ReadInConfig(); err != nil {
+		return err
+	}
+
 	return nil
 }

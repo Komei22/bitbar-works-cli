@@ -9,13 +9,13 @@ import (
 var finishCmd = &cobra.Command{
 	Use:   "finish",
 	Short: "Finish work command",
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		_, err := atendance.StampAtendance(atendance.FinishWork)
 		if err != nil {
-			printMacNotificationCenter(err)
-			return
+			return err
 		}
-		printMacNotificationCenter("call finish")
+		printMacNotificationCenter("Start work")
+		return nil
 	},
 }
 
