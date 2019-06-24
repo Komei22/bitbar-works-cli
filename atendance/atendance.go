@@ -106,7 +106,7 @@ func (a *Atendance) SetAtendanceInfo() error {
 	}
 
 	// If work history is nothing, SwTime and FwTime set ZeroDay.
-	if string(out) == "" {
+	if string(out) == "\n" {
 		a.SwTime = time.Time{}
 		a.FwTime = time.Time{}
 		return nil
