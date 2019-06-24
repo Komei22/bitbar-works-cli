@@ -28,11 +28,11 @@ const (
 // RecordAttendance post and record attendance information.
 func RecordAttendance(action Action) (time.Time, error) {
 	t := time.Now()
-	// err := postAttendance(action)
-	// if err != nil {
-	// 	return t, err
-	// }
-	err := loggingWorkHistory(action, t)
+	err := postAttendance(action)
+	if err != nil {
+		return t, err
+	}
+	err = loggingWorkHistory(action, t)
 	if err != nil {
 		return t, err
 	}
