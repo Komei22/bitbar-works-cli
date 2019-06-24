@@ -10,7 +10,11 @@ var finishCmd = &cobra.Command{
 	Use:   "finish",
 	Short: "Finish work command",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		// TODO: check already start work
+		a := attendance.Attendance{}
+		a.SetAttendanceInfo()
+		if isStampAttendance(a.FwTime) {
+			return nil
+		}
 
 		_, err := attendance.StampAttendance(attendance.FinishWork)
 		if err != nil {
