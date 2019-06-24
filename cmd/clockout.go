@@ -12,11 +12,11 @@ var clockoutCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		a := attendance.Attendance{}
 		a.SetAttendanceInfo()
-		if isStampAttendance(a.FwTime) {
+		if isClockInOut(a.FwTime) {
 			return nil
 		}
 
-		_, err := attendance.StampAttendance(attendance.FinishWork)
+		_, err := attendance.RecordAttendance(attendance.ClockOut)
 		if err != nil {
 			printMacNotificationCenter("Fail clock out")
 			return err

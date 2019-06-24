@@ -18,14 +18,14 @@ import (
 type Action int
 
 const (
-	// StartWork is starting work action
-	StartWork = iota
-	// FinishWork is ending work action
-	FinishWork
+	// ClockIn is starting work action
+	ClockIn = iota
+	// ClockOut is ending work action
+	ClockOut
 )
 
-// StampAttendance post and record attendance information.
-func StampAttendance(action Action) (time.Time, error) {
+// RecordAttendance post and record attendance information.
+func RecordAttendance(action Action) (time.Time, error) {
 	t := time.Now()
 	// err := postAttendance(action)
 	// if err != nil {
@@ -47,7 +47,7 @@ func postAttendance(action Action) error {
 	values := url.Values{}
 	values.Add("user_id", viper.GetString("WORK_USER"))
 	values.Add("password", viper.GetString("WORK_PASSWORD"))
-	if action == StartWork {
+	if action == ClockIn {
 		values.Add("dakoku", "syussya")
 	} else {
 		values.Add("dakoku", "taisya")
@@ -117,7 +117,7 @@ func (a *Attendance) SetAttendanceInfo() error {
 
 	// If the end line in .work_history is Finish work action, FwTime set the time of the end line and SwTime set second line of the end.
 	// If the end line in .work_history is Start work action, SwTime set the time of the end line and FwTime set ZeroTime.
-	if record[0] == strconv.Itoa(FinishWork) {
+	if record[0] == strconv.Itoa(ClockOut) {
 		a.FwTime, err = time.Parse(time.RFC3339, record[1])
 		cmdstr = `cat ~/.work_history | tail -2 | head -1`
 		out, err = exec.Command("sh", "-c", cmdstr).Output()

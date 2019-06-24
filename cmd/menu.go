@@ -59,7 +59,7 @@ func init() {
 	rootCmd.AddCommand(menuCmd)
 }
 
-func isStampAttendance(t time.Time) bool {
+func isClockInOut(t time.Time) bool {
 	if !isToday(t) || t.IsZero() {
 		return false
 	}
@@ -74,9 +74,9 @@ func isToday(t time.Time) bool {
 }
 
 func checkWorkStatus(a attendance.Attendance) int {
-	if !isStampAttendance(a.SwTime) && !isStampAttendance(a.FwTime) {
+	if !isClockInOut(a.SwTime) && !isClockInOut(a.FwTime) {
 		return beforeWork
-	} else if isStampAttendance(a.SwTime) && !isStampAttendance(a.FwTime) {
+	} else if isClockInOut(a.SwTime) && !isClockInOut(a.FwTime) {
 		return working
 	} else {
 		return afterWork
