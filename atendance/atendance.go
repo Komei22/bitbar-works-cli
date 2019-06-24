@@ -1,10 +1,13 @@
 package atendance
 
 import (
+	"bytes"
+	"encoding/csv"
 	"fmt"
 	"net/http"
 	"net/url"
 	"os/exec"
+	"strconv"
 	"time"
 
 	"github.com/mitchellh/go-homedir"
@@ -24,11 +27,11 @@ const (
 // StampAtendance post and record atendance information.
 func StampAtendance(action Action) (time.Time, error) {
 	t := time.Now()
-	err := postAtendance(action)
-	if err != nil {
-		return t, err
-	}
-	err = loggingWorkHistory(action, t)
+	// err := postAtendance(action)
+	// if err != nil {
+	// 	return t, err
+	// }
+	err := loggingWorkHistory(action, t)
 	if err != nil {
 		return t, err
 	}
@@ -64,7 +67,7 @@ func initWorkHistory() error {
 }
 
 func loggingWorkHistory(action Action, t time.Time) error {
-	cmdstr := fmt.Sprintf(`echo '%d, %s' >> ~/.work_history`, action, t.Format(time.RFC3339))
+	cmdstr := fmt.Sprintf(`echo '%d,%s' >> ~/.work_history`, action, t.Format(time.RFC3339))
 	err := exec.Command("sh", "-c", cmdstr).Run()
 	if err != nil {
 		return err
@@ -83,6 +86,53 @@ func loadConfig() error {
 
 	if err := viper.ReadInConfig(); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// Atendance have atendance information
+type Atendance struct {
+	SwTime time.Time
+	FwTime time.Time
+}
+
+// SetAtendanceInfo set start and finish work time
+func (a *Atendance) SetAtendanceInfo() error {
+	cmdstr := `cat ~/.work_history | tail -1`
+	out, err := exec.Command("sh", "-c", cmdstr).Output()
+	if err != nil {
+		return err
+	}
+
+	// If work history is nothing, SwTime and FwTime set ZeroDay.
+	if string(out) == "" {
+		a.SwTime = time.Time{}
+		a.FwTime = time.Time{}
+		return nil
+	}
+
+	r := csv.NewReader(bytes.NewReader(out))
+	record, _ := r.Read()
+
+	// If the end line in .work_history is Finish work action, FwTime set the time of the end line and SwTime set second line of the end.
+	// If the end line in .work_history is Start work action, SwTime set the time of the end line and FwTime set ZeroTime.
+	if record[0] == strconv.Itoa(FinishWork) {
+		a.FwTime, err = time.Parse(time.RFC3339, record[1])
+		cmdstr = `cat ~/.work_history | tail -2 | head -1`
+		out, err = exec.Command("sh", "-c", cmdstr).Output()
+		if err != nil {
+			return err
+		}
+		r := csv.NewReader(bytes.NewReader(out))
+		record, _ := r.Read()
+		a.SwTime, err = time.Parse(time.RFC3339, record[1])
+		if err != nil {
+			return err
+		}
+	} else {
+		a.SwTime, err = time.Parse(time.RFC3339, record[1])
+		a.FwTime = time.Time{}
 	}
 
 	return nil
