@@ -5,10 +5,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// startCmd represents the start command
-var startCmd = &cobra.Command{
-	Use:   "start",
-	Short: "Start work command",
+// clockinCmd represents the clockin command
+var clockinCmd = &cobra.Command{
+	Use:   "clockin",
+	Short: "clockout command",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		a := attendance.Attendance{}
 		a.SetAttendanceInfo()
@@ -18,14 +18,14 @@ var startCmd = &cobra.Command{
 
 		_, err := attendance.StampAttendance(attendance.StartWork)
 		if err != nil {
-			printMacNotificationCenter("Fail start work")
+			printMacNotificationCenter("Fail clock in")
 			return err
 		}
-		printMacNotificationCenter("Start work")
+		printMacNotificationCenter("Clock in")
 		return nil
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(startCmd)
+	rootCmd.AddCommand(clockinCmd)
 }

@@ -5,10 +5,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// finishCmd represents the start command
-var finishCmd = &cobra.Command{
-	Use:   "finish",
-	Short: "Finish work command",
+// clockoutCmd represents the start command
+var clockoutCmd = &cobra.Command{
+	Use:   "clockout",
+	Short: "clockout command",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		a := attendance.Attendance{}
 		a.SetAttendanceInfo()
@@ -18,13 +18,14 @@ var finishCmd = &cobra.Command{
 
 		_, err := attendance.StampAttendance(attendance.FinishWork)
 		if err != nil {
+			printMacNotificationCenter("Fail clock out")
 			return err
 		}
-		printMacNotificationCenter("Finish work")
+		printMacNotificationCenter("Clock out")
 		return nil
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(finishCmd)
+	rootCmd.AddCommand(clockoutCmd)
 }
