@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/Komei22/bitbar-works-go/atendance"
+	"github.com/Komei22/bitbar-works-go/attendance"
 	"github.com/johnmccabe/go-bitbar"
 	"github.com/spf13/cobra"
 )
@@ -29,8 +29,8 @@ var menuCmd = &cobra.Command{
 		startStatus := "Not yet"
 		finishStatus := "Not yet"
 
-		a := atendance.Atendance{}
-		a.SetAtendanceInfo()
+		a := attendance.Attendance{}
+		a.SetAttendanceInfo()
 
 		switch checkWorkStatus(a) {
 		case beforeWork:
@@ -59,7 +59,7 @@ func init() {
 	rootCmd.AddCommand(menuCmd)
 }
 
-func isStampAtendance(t time.Time) bool {
+func isStampAttendance(t time.Time) bool {
 	if !isToday(t) || t.IsZero() {
 		return false
 	}
@@ -73,10 +73,10 @@ func isToday(t time.Time) bool {
 	return false
 }
 
-func checkWorkStatus(a atendance.Atendance) int {
-	if !isStampAtendance(a.SwTime) && !isStampAtendance(a.FwTime) {
+func checkWorkStatus(a attendance.Attendance) int {
+	if !isStampAttendance(a.SwTime) && !isStampAttendance(a.FwTime) {
 		return beforeWork
-	} else if isStampAtendance(a.SwTime) && !isStampAtendance(a.FwTime) {
+	} else if isStampAttendance(a.SwTime) && !isStampAttendance(a.FwTime) {
 		return working
 	} else {
 		return afterWork

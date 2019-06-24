@@ -1,4 +1,4 @@
-package atendance
+package attendance
 
 import (
 	"bytes"
@@ -14,7 +14,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Action is atendance action
+// Action is attendance action
 type Action int
 
 const (
@@ -24,10 +24,10 @@ const (
 	FinishWork
 )
 
-// StampAtendance post and record atendance information.
-func StampAtendance(action Action) (time.Time, error) {
+// StampAttendance post and record attendance information.
+func StampAttendance(action Action) (time.Time, error) {
 	t := time.Now()
-	// err := postAtendance(action)
+	// err := postAttendance(action)
 	// if err != nil {
 	// 	return t, err
 	// }
@@ -38,7 +38,7 @@ func StampAtendance(action Action) (time.Time, error) {
 	return t, nil
 }
 
-func postAtendance(action Action) error {
+func postAttendance(action Action) error {
 	if err := loadConfig(); err != nil {
 		return err
 	}
@@ -91,14 +91,14 @@ func loadConfig() error {
 	return nil
 }
 
-// Atendance have atendance information
-type Atendance struct {
+// Attendance have attendance information
+type Attendance struct {
 	SwTime time.Time
 	FwTime time.Time
 }
 
-// SetAtendanceInfo set start and finish work time
-func (a *Atendance) SetAtendanceInfo() error {
+// SetAttendanceInfo set start and finish work time
+func (a *Attendance) SetAttendanceInfo() error {
 	cmdstr := `cat ~/.work_history | tail -1`
 	out, err := exec.Command("sh", "-c", cmdstr).Output()
 	if err != nil {

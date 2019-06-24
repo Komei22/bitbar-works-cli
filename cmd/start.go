@@ -1,8 +1,7 @@
 package cmd
 
 import (
-	// "github.com/Komei22/bitbar-works-go/atendance"
-	"github.com/Komei22/bitbar-works-go/atendance"
+	"github.com/Komei22/bitbar-works-go/attendance"
 	"github.com/spf13/cobra"
 )
 
@@ -14,7 +13,7 @@ var startCmd = &cobra.Command{
 		// TODO: check already start work
 
 		// start work request and logging
-		_, err := atendance.StampAtendance(atendance.StartWork)
+		_, err := attendance.StampAttendance(attendance.StartWork)
 		if err != nil {
 			printMacNotificationCenter("Fail start work")
 			return err

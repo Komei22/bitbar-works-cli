@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/Komei22/bitbar-works-go/atendance"
+	"github.com/Komei22/bitbar-works-go/attendance"
 	"github.com/spf13/cobra"
 )
 
@@ -12,7 +12,7 @@ var finishCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// TODO: check already start work
 
-		_, err := atendance.StampAtendance(atendance.FinishWork)
+		_, err := attendance.StampAttendance(attendance.FinishWork)
 		if err != nil {
 			return err
 		}
