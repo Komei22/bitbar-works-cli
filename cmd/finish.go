@@ -10,11 +10,13 @@ var finishCmd = &cobra.Command{
 	Use:   "finish",
 	Short: "Finish work command",
 	RunE: func(cmd *cobra.Command, args []string) error {
+		// TODO: check already start work
+
 		_, err := atendance.StampAtendance(atendance.FinishWork)
 		if err != nil {
 			return err
 		}
-		printMacNotificationCenter("Start work")
+		printMacNotificationCenter("Finish work")
 		return nil
 	},
 }
