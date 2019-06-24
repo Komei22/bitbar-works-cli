@@ -40,14 +40,14 @@ var menuCmd = &cobra.Command{
 		case working:
 			startStatus := a.SwTime.Format("15:04")
 			plugin.StatusLine(fmt.Sprintf("🏢 %s /🚶‍ %s", startStatus, finishStatus))
-			submenu.Line("Clock in")
+			submenu.Line("Already clock in")
 			submenu.Line("Clock out").Bash(ex).Params([]string{"clockout"}).Terminal(false)
 		case afterWork:
 			startStatus := a.SwTime.Format("15:04")
 			finishStatus := a.FwTime.Format("15:04")
 			plugin.StatusLine(fmt.Sprintf("🏢 %s /🚶‍ %s", startStatus, finishStatus))
-			submenu.Line("Clock in")
-			submenu.Line("Clock out")
+			submenu.Line("Already clock in")
+			submenu.Line("Already clock out")
 		default:
 		}
 
