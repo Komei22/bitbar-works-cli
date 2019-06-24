@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"os"
 	"os/exec"
 	"strconv"
 	"time"
@@ -61,17 +62,21 @@ func postAttendance(action Action) error {
 	return nil
 }
 
-func initWorkHistory() error {
-	err := exec.Command("sh", "-c", "touch ~/.work_history").Run()
-	return err
-}
-
 func loggingWorkHistory(action Action, t time.Time) error {
-	cmdstr := fmt.Sprintf(`echo '%d,%s' >> ~/.work_history`, action, t.Format(time.RFC3339))
-	err := exec.Command("sh", "-c", cmdstr).Run()
+	home, err := homedir.Dir()
 	if err != nil {
 		return err
 	}
+	filepath := home + "/.work_history"
+	f, err := os.OpenFile(filepath, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0666)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	outStr := fmt.Sprintf("%d,%s", action, t.Format(time.RFC3339))
+	fmt.Fprintf(f, outStr)
+
 	return nil
 }
 
