@@ -74,7 +74,7 @@ func loggingWorkHistory(action Action, t time.Time) error {
 	}
 	defer f.Close()
 
-	outStr := fmt.Sprintf("%d,%s", action, t.Format(time.RFC3339))
+	outStr := fmt.Sprintf("%d,%s\n", action, t.Format(time.RFC3339))
 	fmt.Fprintf(f, outStr)
 
 	return nil
