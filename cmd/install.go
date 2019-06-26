@@ -24,7 +24,6 @@ var installCmd = &cobra.Command{
 		}
 
 		createConfig(home + "/.bitbar-works.toml")
-		createWorkHistory(home + "/.work_history")
 
 		pluginDir, err := getBitbarPluginDir()
 		if err != nil {
@@ -45,18 +44,6 @@ var installCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(installCmd)
-}
-
-func createWorkHistory(filepath string) error {
-	f, err := os.Create(filepath)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
-	f.Write(([]byte)(""))
-
-	return err
 }
 
 func createConfig(filepath string) error {
